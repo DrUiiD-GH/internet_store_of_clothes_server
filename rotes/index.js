@@ -1,4 +1,5 @@
 const Router = require('express')
+const authMiddleware = require('../middleware/authMiddleware')
 const router = new Router()
 
 const basketRouter = require('./basketRouter')
@@ -10,7 +11,7 @@ const typeRouter = require('./typeRouter')
 const userRouter = require('./userRouter')
 
 router.use('/user', userRouter)
-router.use('/basket', basketRouter)
+router.use('/basket',authMiddleware, basketRouter)
 router.use('/category', categoryRouter)
 router.use('/subcategory', subcategoryRouter)
 router.use('/type', typeRouter)
