@@ -5,6 +5,6 @@ const basketController= require('../controllers/basketController')
 
 router.get('/', basketController.getBasket)
 router.post('/', basketController.addInBasket)
-router.put('/', basketController.updateBasket)
+router.put('/', basketController.updateCountBasket)
 
 module.exports = router
