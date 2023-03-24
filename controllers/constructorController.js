@@ -1,9 +1,9 @@
-const {Product, ImgForConstructor} = require("../models/models");
+const constructorService = require("../service/constructorService");
 
 class ConstructorController{
     async get(req, res){
-        let productsForConstructor = await Product.findAll({include:[{model:ImgForConstructor, as: 'img_for_constructor'}]})
-        return res.json([productsForConstructor])
+        const products = await constructorService.getProducts()
+        return res.json(products)
     }
 }
 module.exports = new ConstructorController()

@@ -58,13 +58,7 @@ const ImgForConstructor = sequelize.define('img_for_constructor', {
     cloth_img:{type:DataTypes.STRING, allowNull:false}
 })
 
-const CategorySubcategory = sequelize.define('category_subcategory', {
-    id:{type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true}
-})
 
-const CategoryType = sequelize.define('category_type', {
-    id:{type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true}
-})
 
 
 User.hasOne(Basket)
@@ -85,20 +79,16 @@ ImgForConstructor.belongsTo(Product)
 Product.hasMany(ProductInfo)
 ProductInfo.belongsTo(Product)
 
-Category.hasMany(Product)
-Product.belongsTo(Category)
-
 Subcategory.hasMany(Product)
 Product.belongsTo(Subcategory)
 
-Type.hasMany(Product)
-Product.belongsTo(Type)
+Category.hasMany(Subcategory)
+Subcategory.belongsTo(Category)
 
-Category.belongsToMany(Subcategory, {through: CategorySubcategory})
-Subcategory.belongsToMany(Category, {through: CategorySubcategory})
+Type.hasMany(Subcategory)
+Subcategory.belongsTo(Type)
 
-Category.belongsToMany(Type, {through: CategoryType})
-Type.belongsToMany(Category, {through: CategoryType})
+
 
 module.exports = {
     User,
@@ -110,8 +100,6 @@ module.exports = {
     ProductInfo,
     Subcategory,
     Category,
-    Type,
-    CategorySubcategory,
-    CategoryType
+    Type
 }
 
