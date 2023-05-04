@@ -1,3 +1,5 @@
+const ProductsDto = require('../dtos/products-dto')
+
 const {Category, Subcategory, Product, ImgForCatalog, ProductInfo} = require("../models/models");
 
 class CatalogService{
@@ -17,13 +19,15 @@ class CatalogService{
         let offset = (page-1)*limit
         let products
         if(subcategoryId){
-            products = await Product.findAndCountAll({where:{subcategoryId}, include:{model:ImgForCatalog}, limit, offset})
+            products = await Product.findAndCountAll({where:{subcategoryId}, include:[{model:ImgForCatalog}], limit, offset})
         }else if(categoryId){
             products = await Product.findAndCountAll({include: [{model:Subcategory, where:{categoryId}}, {model:ImgForCatalog}], limit, offset})
         }else {
-            products = await Product.findAndCountAll({limit, offset})
+            products = await Product.findAndCountAll({include:[{model:Subcategory}], limit, offset})
         }
-        return products
+
+       return new ProductsDto({...products})
+       // return products
     }
 
     async getOneProduct(id){
