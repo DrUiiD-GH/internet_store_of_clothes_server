@@ -19,11 +19,11 @@ class CatalogService{
         let offset = (page-1)*limit
         let products
         if(subcategoryId){
-            products = await Product.findAndCountAll({where:{subcategoryId}, include:[{model:ImgForCatalog}], limit, offset})
+            products = await Product.findAndCountAll({where:{subcategoryId}, include:[{model:ImgForCatalog}, {model:Subcategory}], limit, offset})
         }else if(categoryId){
             products = await Product.findAndCountAll({include: [{model:Subcategory, where:{categoryId}}, {model:ImgForCatalog}], limit, offset})
         }else {
-            products = await Product.findAndCountAll({include:[{model:Subcategory}], limit, offset})
+            products = await Product.findAndCountAll({include:[{model:Subcategory}, {model:ImgForCatalog}], limit, offset})
         }
 
        return new ProductsDto({...products})

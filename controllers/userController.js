@@ -36,6 +36,20 @@ class UserController{
         return res.json(data)
     }
 
+    async getInfo(req, res, next){
+        const data = await userService.getInfo(req.user.id)
+        return res.json(data)
+    }
+
+    async editInfo(req, res, next){
+        try {
+            const data = await userService.editInfo(req.user.id, req.body)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
+
+    }
 
 }
 

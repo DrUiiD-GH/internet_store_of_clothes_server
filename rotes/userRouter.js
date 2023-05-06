@@ -10,6 +10,8 @@ router.post('/registration',
     userController.registration)
 router.post('/login', userController.login)
 router.get('/auth',authMiddleware, userController.check)
+router.put('/edit',authMiddleware, userController.editInfo)
+router.get('/info',authMiddleware, userController.getInfo)
 
 
 module.exports = router
