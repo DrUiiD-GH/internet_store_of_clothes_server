@@ -17,7 +17,7 @@ class UserController{
             const userData = await userService.registration(email, password)
             return res.json(userData)
         }catch (e){
-            next(e)
+            return next(e)
         }
     }
 

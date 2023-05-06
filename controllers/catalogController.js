@@ -1,7 +1,7 @@
 const catalogService = require('../service/catalogService')
 class CatalogController{
     async getAllCategories(req, res){
-        const data = await catalogService.getAllCategories()
+        const data = await catalogService.getCategories()
         return res.json(data)
     }
     async getAllSubcategories(req, res){
@@ -21,10 +21,20 @@ class CatalogController{
     }
 
 
-    async createCategory(){
+    async createCategory(req, res){
+        const data = await catalogService.createCategory(req.body.name)
+        return res.json(data)
+    }
+    async createSubcategory(req, res, next){
+        try {
+            const data = await catalogService.createSubcategory(req.body.name, req.body.categoryId, req.body.typeId)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
 
     }
-    async createSubcategory(){
+    async createProduct(){
 
     }
 

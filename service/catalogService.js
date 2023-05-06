@@ -1,9 +1,10 @@
 const ProductsDto = require('../dtos/products-dto')
 
 const {Category, Subcategory, Product, ImgForCatalog, ProductInfo} = require("../models/models");
+const ApiError = require("../error/ApiError");
 
 class CatalogService{
-    async getAllCategories(){
+    async getCategories(){
         return await Category.findAll({order:['id']})
     }
 
@@ -38,6 +39,22 @@ class CatalogService{
                 })
     }
 
+
+    async createCategory(name){
+        await Category.create({name})
+        return await this.getSubcategories()
+    }
+
+    async createSubcategory(name, categoryId, typeId){
+        const category = await Category.findOne({where:{id:categoryId}})
+        if(!category){
+            throw ApiError.badRequest("Категория не неайдена")
+        }else {
+            await Subcategory.create({name, categoryId, typeId})
+        }
+
+        return await this.getSubcategories()
+    }
 
 
 }

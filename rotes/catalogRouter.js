@@ -11,6 +11,7 @@ router.get('/products/:id', catalogController.getOneProduct)
 
 router.post('/categories', catalogController.createCategory)
 router.post('/subcategories', catalogController.createSubcategory)
+router.post('/products', catalogController.createProduct)
 
 
 module.exports = router
