@@ -22,19 +22,25 @@ class CatalogController{
 
 
     async createCategory(req, res){
-        const data = await catalogService.createCategory(req.body.name)
+        const data = await catalogService.newCategory(req.body.name)
         return res.json(data)
     }
     async createSubcategory(req, res, next){
         try {
-            const data = await catalogService.createSubcategory(req.body.name, req.body.categoryId, req.body.typeId)
+            const data = await catalogService.newSubcategory(req.body.name, req.body.categoryId, req.body.typeId)
             return res.json(data)
         }catch (e){
             return next(e)
         }
 
     }
-    async createProduct(){
+    async createProduct(req, res, next){
+        try {
+            const data = await catalogService.newProduct(req)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
 
     }
 
