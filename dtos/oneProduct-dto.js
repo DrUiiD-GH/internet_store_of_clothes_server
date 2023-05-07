@@ -10,7 +10,9 @@ module.exports = class OneProductsDto{
         this.name = model.dataValues.name
         this.price = model.dataValues.price
         this.subcategory = model.subcategory.name
-        this.description = model.product_description.description
+        if(model.product_description){
+            this.description = model.product_description.description
+        }
         this.info = model.product_infos
         this.imgs = model.img_for_catalogs.map(img=>{
             return {

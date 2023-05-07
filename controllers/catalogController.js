@@ -14,16 +14,25 @@ class CatalogController{
         return res.json(data)
 
     }
-    async getOneProduct(req, res){
-        const {id} = req.params
-        const data = await catalogService.getOneProduct(id)
-        return res.json(data)
+    async getOneProduct(req, res, next){
+        try {
+            const {id} = req.params
+            const data = await catalogService.getOneProduct(id)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
     }
 
 
-    async createCategory(req, res){
-        const data = await catalogService.newCategory(req.body.name)
-        return res.json(data)
+    async createCategory(req, res, next){
+        try {
+            const data = await catalogService.newCategory(req.body.name)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
+
     }
     async createSubcategory(req, res, next){
         try {

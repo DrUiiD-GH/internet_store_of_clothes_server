@@ -9,7 +9,8 @@ module.exports = class ProductsDto {
                 id: line.id,
                 name: line.name,
                 price: line.price,
-                subcategoryName: line.subcategory.name
+                subcategoryName: line.subcategory.name,
+                img: line.img_for_catalogs[0]
             }
         })
 

@@ -43,12 +43,16 @@ class CatalogService{
     }
 
     async getOneProduct(id){
-        const product =  await Product.findOne(
+        let product =  await Product.findOne(
                 {
                     where: {id},
                     include: [{model:Subcategory}, {model:ProductDescription}, {model: ProductInfo}, {model: ImgForCatalog}]
                 })
-        return new OneProductsDto({...product})
+        if(product){
+            return new OneProductsDto({...product})
+        }else {
+            throw ApiError.badRequest("Товар не найден")
+        }
     }
 
 
