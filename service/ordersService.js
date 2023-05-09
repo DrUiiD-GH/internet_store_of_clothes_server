@@ -5,10 +5,7 @@ const ApiError = require("../error/ApiError");
 class OrdersService{
     async getAllOrders(userId){
         return await Order.findAll({
-            where: {userId},
-            include: [
-                {model: ProductOrder}
-            ]
+            where: {userId}
         })
     }
 
