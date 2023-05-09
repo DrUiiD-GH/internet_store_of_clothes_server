@@ -20,7 +20,7 @@ class CatalogService{
 
     async getProducts(categoryId, subcategoryId, limit, page){
         page = page || 1
-        limit = limit ||12
+        limit = limit ||1000
         let offset = (page-1)*limit
         let products
         if (subcategoryId) {
@@ -81,7 +81,7 @@ class CatalogService{
         await ProductDescription.create({productId: product.id, description})
 
         if(info){
-            info =  JSON.parse(info)
+            info = JSON.parse(info)
             info.forEach(i=>{
                 ProductInfo.create({
                     title: i.title,
@@ -94,11 +94,18 @@ class CatalogService{
         let fileName = uuid.v4() + ".png"
         await imgConstructor.mv(path.resolve(__dirname, '..', 'static', 'constructor', fileName))
         await ImgForConstructor.create({productId:product.id, src:fileName})
-        imgsCatalog.map(async img=>{
-            fileName = uuid.v4() + ".jpg"
-            await img.mv(path.resolve(__dirname, '..', 'static', 'catalog', fileName))
-            await ImgForCatalog.create({productId:product.id, src:fileName})
-        })
+
+
+        if(imgsCatalog[0]){
+            imgsCatalog.map(async img=>{
+
+            })
+        }else {
+            const fileNameCat = uuid.v4() + ".jpg"
+            await imgsCatalog.mv(path.resolve(__dirname, '..', 'static', 'catalog', fileNameCat))
+            await ImgForCatalog.create({productId:product.id, src:fileNameCat})
+        }
+
 
         return  product
     }
