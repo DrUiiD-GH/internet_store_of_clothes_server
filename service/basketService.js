@@ -1,14 +1,14 @@
-const {Basket, ProductBasket, Product, ImgForCatalog} = require("../models/models");
+const {Basket, ProductBasket, Product, ImgForCatalog, Subcategory} = require("../models/models");
 
 
 const findFullBasket = async (userId)=>{
     return await Basket.findOne(
         {
             where: {userId},
-            include: [{
+            include: {
                 model: ProductBasket,
-                include: {model: Product, include: {model: ImgForCatalog}}
-            }]
+                include: {model: Product, include: [{model: ImgForCatalog}, {model: Subcategory}]}, order:['id']
+            }
         }
     )
 }
@@ -31,7 +31,6 @@ class BasketService{
     }//ready
 
     async addInBasket(productId, userId){
-
         let basket = await findFullBasket(userId)
         let position = await ProductBasket.findOne({where: {
                 basketId:basket.id,
@@ -86,7 +85,7 @@ class BasketService{
     async clearBasket(userId){
         let basket = await findFullBasket(userId)
         await ProductBasket.destroy({where:{basketId:basket.id}})
-         basket = await updateBasket(userId)
+        basket = await updateBasket(userId)
         return basket
     }
 }

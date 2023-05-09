@@ -20,24 +20,46 @@ class CatalogService{
 
     async getProducts(categoryId, subcategoryId, limit, page){
         page = page || 1
-        limit = limit ||1000
+        limit = limit || 12
         let offset = (page-1)*limit
         let products
+        let countFind
         if (subcategoryId) {
+            countFind = await Product.findAndCountAll({
+                where: {subcategoryId}, limit, offset
+            })
             products = await Product.findAndCountAll({
-                where: {subcategoryId}, include: [{model: ImgForCatalog}, {model: Subcategory}], order:['id'], limit, offset
+                where: {subcategoryId},
+                include: [
+                    {model: ImgForCatalog},
+                    {model: Subcategory}
+                ],
+                order:['id'], limit, offset
             })
         } else if (categoryId) {
+            countFind = await Product.findAndCountAll({
+                include: [
+                    {model: Subcategory, where: {categoryId}}
+                ],
+                limit, offset
+            })
             products = await Product.findAndCountAll({
-                include: [{
-                    model: Subcategory, where: {categoryId}
-                }, {model: ImgForCatalog}], order:['id'], limit, offset
+                include: [
+                    {model: Subcategory, where: {categoryId}},
+                    {model: ImgForCatalog}
+                ],
+                order:['id'], limit, offset
             })
         } else {
+            countFind = await Product.findAndCountAll()
             products = await Product.findAndCountAll({
-                include: [{model: Subcategory}, {model: ImgForCatalog}], order:['id'], limit, offset
+                include: [{model: Subcategory}, {model: ImgForCatalog}],
+                order:['id'], limit, offset
             })
+            console.log(countFind)
+
         }
+        products.count=countFind.count
 
        return new ProductsDto({...products})
     }
