@@ -36,37 +36,48 @@ class userService{
    }
 
    async getInfo(id){
-      const user = await User.findOne({where:id})
-      return new UserInfoDTO({...user.dataValues})
+      const userInfo = await User.findOne({where:id})
+      return new UserInfoDTO({...userInfo.dataValues})
    }
 
 
-   async editInfo(id, newInfo){
-      let user
+   async editName(id, newInfo){
 
-      if(newInfo.email){await User.update({email:newInfo.email}, {where:{id}})}
-      if(newInfo.name){await User.update({name:newInfo.name}, {where:{id}})}
-      if(newInfo.phoneNumber){await User.update({phoneNumber:newInfo.phoneNumber}, {where:{id}})}
-      if(newInfo.address){await User.update({address:newInfo.address}, {where:{id}})}
-      if(newInfo.newPassword){
-         user = await User.findOne({where:{id}})
-         let comparePassword = bcrypt.compareSync(newInfo.oldPassword, user.password)
-         console.log(comparePassword)
-         if(!comparePassword){
-            throw ApiError.badRequest("Не верный пароль")
-         }else{
-            const hashPassword = await bcrypt.hash(newInfo.newPassword, 5)
-            await User.update({password:hashPassword}, {where:{id}})
-         }
+      await User.update({name:newInfo.name}, {where:{id}})
+      return await User.findOne({where: {id}})
+   }
+
+   async editEmail(id, newInfo){
+      const candidate = await User.findOne({where:{email:newInfo.email}})
+      if(!candidate){
+         await User.update({email:newInfo.email}, {where:{id}})
+      }else {
+         throw ApiError.badRequest('Пользоваетель с таким email уже существует')
       }
-
-      user = await User.findOne({where:{id}})
-      console.log(newInfo.newPassword)
-
-      return user
+      return await User.findOne({where: {id}})
    }
 
+   async editPassword(id, newInfo){
+      const user = await User.findOne({where:{id}})
+      let comparePassword = bcrypt.compareSync(newInfo.oldPassword, user.password)
+      if(!comparePassword){
+         throw ApiError.badRequest("Не верный пароль")
+      }else{
+         const hashPassword = await bcrypt.hash(newInfo.newPassword, 5)
+         await User.update({password:hashPassword}, {where:{id}})
+      }
+      return await User.findOne({where: {id}})
+   }
 
+   async editPhone(id, newInfo){
+      await User.update({phoneNumber:newInfo.phoneNumber}, {where:{id}})
+      return await User.findOne({where: {id}})
+   }
+   async editAddress(id, newInfo){
+      console.log(newInfo)
+      await User.update({address:newInfo.address}, {where:{id}})
+      return await User.findOne({where: {id}})
+   }
 
 
 }

@@ -1,8 +1,6 @@
-const ApiError = require('../error/ApiError')
-const {User, Basket} = require("../models/models");
-const bcrypt = require('bcrypt')
+
 const userService = require('../service/userService')
-const tokenService = require('../service/tokenService')
+
 const {validationResult} = require('express-validator')
 
 
@@ -36,19 +34,67 @@ class UserController{
         return res.json(data)
     }
 
+
+
+
     async getInfo(req, res, next){
         const data = await userService.getInfo(req.user.id)
         return res.json(data)
     }
 
-    async editInfo(req, res, next){
+
+    async editName(req, res, next){
         try {
-            const data = await userService.editInfo(req.user.id, req.body)
+            const data = await userService.editName(req.user.id, req.body)
             return res.json(data)
         }catch (e){
             return next(e)
         }
+    }
 
+    async editEmail(req, res, next){
+        try {
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return res.status(400).json(errors.array())
+            }
+            const data = await userService.editEmail(req.user.id, req.body)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
+    }
+
+    async editPassword(req, res, next){
+        try {
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return res.status(400).json(errors.array())
+            }
+            const data = await userService.editPassword(req.user.id, req.body)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
+    }
+
+    async editPhone(req, res, next){
+        try {
+
+            const data = await userService.editPhone(req.user.id, req.body)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
+    }
+
+    async editAddress(req, res, next){
+        try {
+            const data = await userService.editAddress(req.user.id, req.body)
+            return res.json(data)
+        }catch (e){
+            return next(e)
+        }
     }
 
 }
