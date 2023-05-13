@@ -8,7 +8,16 @@ class OrdersController{
         }catch (e){
             next(e)
         }
+    }
 
+    async getOneOrder(req, res, next){
+        try {
+            const {id} = req.params
+            const order = await ordersService.getOneOrder(id)
+            return res.json(order)
+        }catch (e){
+            next(e)
+        }
     }
 
     async addOrder(req, res, next){

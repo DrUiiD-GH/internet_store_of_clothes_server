@@ -1,12 +1,26 @@
-const {Order, ProductOrder, Basket, ProductBasket} = require("../models/models");
+const {Order, ProductOrder, Basket, ProductBasket, ImgForCatalog, Product} = require("../models/models");
 const basketService = require('./basketService')
 const ApiError = require("../error/ApiError");
+const OneOrderDto = require("../dtos/oneOrder-dto")
 
 class OrdersService{
     async getAllOrders(userId){
         return await Order.findAll({
             where: {userId}
         })
+    }
+
+    async getOneOrder(id){
+        const order = await Order.findOne({
+            where:{id},
+            include:{
+                model:ProductOrder,
+                include:{
+                    model:Product,
+                    include:ImgForCatalog
+                }}
+        })
+        return new OneOrderDto(order)
     }
 
     async createNewOrder(userId){
